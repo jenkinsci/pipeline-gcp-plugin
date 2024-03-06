@@ -1,0 +1,7 @@
+_extends: .github
+tag-template: pipeline-gcp-$NEXT_MINOR_VERSION
+
+template: |
+  ## What’s Changed
+
+  $CHANGES
