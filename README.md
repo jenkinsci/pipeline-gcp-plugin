@@ -1,6 +1,6 @@
 # Pipeline: GCP Steps
 
-[![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins/pipeline-gcp/master)](https://ci.jenkins.io/job/Plugins/job/pipeline-gcp/job/master/)
+[![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins/pipeline-gcp-plugin/master)](https://ci.jenkins.io/job/Plugins/job/pipeline-gcp-plugin/job/master/)
 
 ## Introduction
 
