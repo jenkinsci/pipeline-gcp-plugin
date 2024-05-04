@@ -15,6 +15,7 @@ The service account will need to have the necessary permissions to interact with
 ## Features
 
 * [withGCP](#withGCP)
+* [createFirewallRule](#createFirewallRule)
 * _more features to come..._
 
 ### withGCP
@@ -25,6 +26,19 @@ And will also attempt to extract the `project_id` from the file and set it as `C
 withGCP(credentialsId: "credentials-id") {
     // run gcloud commands here
 }
+```
+
+### createFirewallRule
+This step will create a firewall rule with the given configuration.
+Please refer to the [CLI command documentation](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/create) for more information on the parameters.
+
+Either `allow` or `action` must be provided:
+```groovy
+createFirewallRule(name: "firewallRuleName", allow: "tcp:22")
+```
+or
+```groovy
+createFirewallRule(name: "firewallRuleName", action: "DENY", rules: "tcp:22")
 ```
 
 ## Contributing

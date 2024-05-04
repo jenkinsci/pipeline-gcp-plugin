@@ -1,0 +1,54 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
+    <f:entry title="Name" field="name">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Action" field="action">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Allow" field="allow">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Description" field="description">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Destination Ranges" field="destinationRanges">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Direction" field="direction">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Disabled" field="disabled">
+        <f:checkbox/>
+    </f:entry>
+    <f:entry title="Enable Logging" field="enableLogging">
+        <f:checkbox/>
+    </f:entry>
+    <f:entry title="Logging Metadata" field="loggingMetadata">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Network" field="network">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Priority" field="priority">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Rules" field="rules">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Source Ranges" field="sourceRanges">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Source Service Accounts" field="sourceServiceAccounts">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Source Tags" field="sourceTags">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Target Service Accounts" field="targetServiceAccounts">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Target Tags" field="targetTags">
+        <f:textbox/>
+    </f:entry>
+</j:jelly>

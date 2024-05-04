@@ -3,6 +3,7 @@ package io.jenkins.plugins.step;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -59,7 +60,7 @@ class WithGCPStepTest {
     }
 
     @Test
-    void testCredentialsMissing() throws Exception {
+    void testCredentialsMissing() {
         try (final var credentialsProviderMock = mockStatic(CredentialsProvider.class);
                 final var jenkinsMock = mockStatic(Jenkins.class)) {
             jenkinsMock.when(Jenkins::get).thenReturn(mock(Jenkins.class));
@@ -73,10 +74,8 @@ class WithGCPStepTest {
 
             assertNotNull(result);
 
-            final var executionResult = result.start();
+            assertThrows(IllegalArgumentException.class, result::start);
 
-            assertFalse(executionResult);
-            verify(listenerMock).getLogger();
             verifyNoInteractions(envVarsMock);
         }
     }
@@ -129,7 +128,7 @@ class WithGCPStepTest {
     @Test
     void testDescriptor() {
         final var descriptor = new WithGCPStep.Descriptor();
-        assertEquals("Sets GCP credentials for nested block", descriptor.getDisplayName());
+        assertEquals("Set GCP credentials for nested block", descriptor.getDisplayName());
         assertEquals("withGCP", descriptor.getFunctionName());
         assertTrue(descriptor.takesImplicitBlockArgument());
         assertTrue(descriptor
