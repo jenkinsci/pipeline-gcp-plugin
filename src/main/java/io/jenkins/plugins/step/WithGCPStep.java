@@ -55,7 +55,7 @@ public class WithGCPStep extends Step {
         @Override
         @NonNull
         public String getDisplayName() {
-            return "Sets GCP credentials for nested block";
+            return "Set GCP credentials for nested block";
         }
 
         @Override
@@ -80,14 +80,13 @@ public class WithGCPStep extends Step {
         @Override
         public boolean start() throws Exception {
             final var context = getContext();
-            final var listener = context.get(TaskListener.class);
             final var fileCreds = getFileCredentials();
 
             if (fileCreds == null) {
-                listener.getLogger().println("Couldn't find credentials file with id " + credentialsId);
-                return false;
+                throw new IllegalArgumentException("Couldn't find credentials file with id " + credentialsId);
             }
 
+            final var listener = context.get(TaskListener.class);
             final var launcher = context.get(Launcher.class);
             final var workspace = context.get(FilePath.class);
             workspace.mkdirs();
