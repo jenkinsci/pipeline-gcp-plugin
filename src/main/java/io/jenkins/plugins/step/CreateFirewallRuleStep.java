@@ -1,6 +1,7 @@
 package io.jenkins.plugins.step;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.Run;
@@ -196,7 +197,7 @@ public class CreateFirewallRuleStep extends Step {
 
         @Override
         public Set<? extends Class<?>> getRequiredContext() {
-            return Set.of(Run.class, Launcher.class);
+            return Set.of(Run.class, Launcher.class, EnvVars.class);
         }
 
         @Override
@@ -302,7 +303,12 @@ public class CreateFirewallRuleStep extends Step {
                 cmd.add("--target-tags=" + step.getTargetTags());
             }
 
-            final var result = launcher.launch().cmds(cmd).quiet(true).join();
+            final var envVars = context.get(EnvVars.class);
+            final var starter = launcher.launch().cmds(cmd).quiet(true);
+            if (envVars != null) {
+                starter.envs(envVars);
+            }
+            final var result = starter.join();
 
             if (result != 0) {
                 throw new IllegalArgumentException("Failed to create a firewall rule with this command: " + cmd);

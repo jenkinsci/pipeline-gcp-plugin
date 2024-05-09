@@ -12,6 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import hudson.EnvVars;
 import hudson.Launcher;
 import hudson.model.Run;
 import hudson.util.ArgumentListBuilder;
@@ -24,6 +25,7 @@ import org.mockito.ArgumentCaptor;
 class CreateFirewallRuleStepTest {
 
     private final StepContext contextMock = mock(StepContext.class);
+    private final EnvVars envVarsMock = mock(EnvVars.class);
     private final Launcher launcherMock = mock(Launcher.class, RETURNS_DEEP_STUBS);
 
     private final CreateFirewallRuleStep step = new CreateFirewallRuleStep("test");
@@ -84,6 +86,23 @@ class CreateFirewallRuleStepTest {
                 .thenReturn(1);
 
         assertThrows(IllegalArgumentException.class, execution::run);
+    }
+
+    @Test
+    void testRunLauncherCommandWithEnvVars() throws Exception {
+        step.setAction("action");
+        when(contextMock.get(EnvVars.class)).thenReturn(envVarsMock);
+        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+
+        when(launcherMock
+                        .launch()
+                        .cmds(any(ArgumentListBuilder.class))
+                        .envs(envVarsMock)
+                        .quiet(true)
+                        .join())
+                .thenReturn(0);
+
+        assertDoesNotThrow(execution::run);
     }
 
     @Test
