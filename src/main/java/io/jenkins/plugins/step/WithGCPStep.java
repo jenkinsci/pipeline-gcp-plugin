@@ -7,7 +7,6 @@ import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.Run;
-import hudson.model.TaskListener;
 import hudson.security.ACL;
 import hudson.util.ArgumentListBuilder;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class WithGCPStep extends Step {
 
         @Override
         public Set<? extends Class<?>> getRequiredContext() {
-            return Set.of(TaskListener.class, EnvVars.class, Run.class, Launcher.class, FilePath.class);
+            return Set.of(EnvVars.class, Run.class, Launcher.class, FilePath.class);
         }
 
         @Override
@@ -86,7 +85,6 @@ public class WithGCPStep extends Step {
                 throw new IllegalArgumentException("Couldn't find credentials file with id " + credentialsId);
             }
 
-            final var listener = context.get(TaskListener.class);
             final var launcher = context.get(Launcher.class);
             final var workspace = context.get(FilePath.class);
             workspace.mkdirs();
@@ -99,9 +97,9 @@ public class WithGCPStep extends Step {
                     launcher.launch().cmds(cmd).pwd(workspace).quiet(true).join();
 
             if (result != 0) {
-                listener.getLogger().println("Failed to authenticate with GCP using the credentials file.");
                 tempFile.delete();
-                return false;
+                throw new IllegalArgumentException(
+                        "Failed to authenticate to GCP using credentials file with id " + credentialsId);
             }
 
             final var envVars = context.get(EnvVars.class);

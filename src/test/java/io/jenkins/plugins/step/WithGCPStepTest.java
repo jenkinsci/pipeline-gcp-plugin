@@ -20,7 +20,6 @@ import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.Run;
-import hudson.model.TaskListener;
 import hudson.util.ArgumentListBuilder;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +34,6 @@ class WithGCPStepTest {
     private static final String GOOGLE_APPLICATION_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
 
     private final StepContext stepContextMock = mock(StepContext.class, RETURNS_DEEP_STUBS);
-    private final TaskListener listenerMock = mock(TaskListener.class, RETURNS_DEEP_STUBS);
     private final Launcher launcherMock = mock(Launcher.class);
     private final FilePath workspaceMock = mock(FilePath.class);
     private final FilePath tempFileMock = mock(FilePath.class);
@@ -45,7 +43,6 @@ class WithGCPStepTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        when(stepContextMock.get(TaskListener.class)).thenReturn(listenerMock);
         when(stepContextMock.get(Launcher.class)).thenReturn(launcherMock);
         when(stepContextMock.get(FilePath.class)).thenReturn(workspaceMock);
         when(stepContextMock.get(EnvVars.class)).thenReturn(envVarsMock);
@@ -117,9 +114,7 @@ class WithGCPStepTest {
 
             assertNotNull(result);
 
-            final var executionResult = result.start();
-
-            assertFalse(executionResult);
+            assertThrows(IllegalArgumentException.class, result::start);
             verify(envVarsMock, never()).put(GOOGLE_APPLICATION_CREDENTIALS, CREDENTIALS_ID);
         }
     }
@@ -133,6 +128,6 @@ class WithGCPStepTest {
         assertTrue(descriptor.takesImplicitBlockArgument());
         assertTrue(descriptor
                 .getRequiredContext()
-                .containsAll(Set.of(TaskListener.class, EnvVars.class, Run.class, Launcher.class, FilePath.class)));
+                .containsAll(Set.of(EnvVars.class, Run.class, Launcher.class, FilePath.class)));
     }
 }
