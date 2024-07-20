@@ -1,10 +1,7 @@
 package io.jenkins.plugins.step;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
@@ -69,9 +66,8 @@ class WithGCPStepTest {
             final var execution = new WithGCPStep(CREDENTIALS_ID);
             final var result = execution.start(stepContextMock);
 
-            assertNotNull(result);
-
-            assertThrows(IllegalArgumentException.class, result::start);
+            assertThat(result).isNotNull();
+            assertThatCode(result::start).isInstanceOf(IllegalArgumentException.class);
 
             verifyNoInteractions(envVarsMock);
         }
@@ -90,11 +86,11 @@ class WithGCPStepTest {
             final var execution = new WithGCPStep(CREDENTIALS_ID);
             final var result = execution.start(stepContextMock);
 
-            assertNotNull(result);
+            assertThat(result).isNotNull();
 
             final var executionResult = result.start();
 
-            assertFalse(executionResult);
+            assertThat(executionResult).isFalse();
             verify(envVarsMock).put(GOOGLE_APPLICATION_CREDENTIALS, CREDENTIALS_ID);
         }
     }
@@ -112,22 +108,20 @@ class WithGCPStepTest {
             final var execution = new WithGCPStep(CREDENTIALS_ID);
             final var result = execution.start(stepContextMock);
 
-            assertNotNull(result);
+            assertThat(result).isNotNull();
 
-            assertThrows(IllegalArgumentException.class, result::start);
+            assertThatCode(result::start).isInstanceOf(IllegalArgumentException.class);
             verify(envVarsMock, never()).put(GOOGLE_APPLICATION_CREDENTIALS, CREDENTIALS_ID);
         }
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @Test
     void testDescriptor() {
         final var descriptor = new WithGCPStep.Descriptor();
-        assertEquals("Set GCP credentials for nested block", descriptor.getDisplayName());
-        assertEquals("withGCP", descriptor.getFunctionName());
-        assertTrue(descriptor.takesImplicitBlockArgument());
-        assertTrue(descriptor
-                .getRequiredContext()
-                .containsAll(Set.of(EnvVars.class, Run.class, Launcher.class, FilePath.class)));
+        assertThat(descriptor.getDisplayName()).isEqualTo("Set GCP credentials for nested block");
+        assertThat(descriptor.getFunctionName()).isEqualTo("withGCP");
+        assertThat(descriptor.takesImplicitBlockArgument()).isTrue();
+        assertThat(descriptor.getRequiredContext())
+                .isEqualTo(Set.of(EnvVars.class, Run.class, Launcher.class, FilePath.class));
     }
 }
