@@ -1,9 +1,7 @@
 package io.jenkins.plugins.step;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
@@ -38,18 +36,17 @@ class DeleteFirewallRuleStepTest {
                 .thenReturn(0);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @Test
     void testDescriptor() {
         final var descriptor = new DeleteFirewallRuleStep.Descriptor();
-        assertEquals("Delete a firewall rule", descriptor.getDisplayName());
-        assertEquals("deleteFirewallRule", descriptor.getFunctionName());
-        assertTrue(descriptor.getRequiredContext().containsAll(Set.of(Run.class, Launcher.class, EnvVars.class)));
+        assertThat(descriptor.getDisplayName()).isEqualTo("Delete a firewall rule");
+        assertThat(descriptor.getFunctionName()).isEqualTo("deleteFirewallRule");
+        assertThat(descriptor.getRequiredContext()).isEqualTo(Set.of(Run.class, Launcher.class, EnvVars.class));
     }
 
     @Test
     void testName() {
-        assertEquals(NAME, step.getName());
+        assertThat(step.getName()).isEqualTo(NAME);
     }
 
     @Test
@@ -73,7 +70,7 @@ class DeleteFirewallRuleStepTest {
                         .join())
                 .thenReturn(0);
 
-        assertDoesNotThrow(execution::start);
+        assertThatCode(execution::start).doesNotThrowAnyException();
     }
 
     @Test
@@ -87,13 +84,13 @@ class DeleteFirewallRuleStepTest {
 
         final var execution = new DeleteFirewallRuleStep.DeleteFirewallRuleStepExecution(contextMock, NAME);
 
-        assertThrows(IllegalArgumentException.class, execution::run);
+        assertThatCode(execution::run).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void testStart() {
         final var execution = step.start(contextMock);
 
-        assertDoesNotThrow(execution::start);
+        assertThatCode(execution::start).doesNotThrowAnyException();
     }
 }

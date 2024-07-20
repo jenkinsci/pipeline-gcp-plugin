@@ -1,10 +1,7 @@
 package io.jenkins.plugins.step;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.atLeastOnce;
@@ -41,20 +38,19 @@ class CreateFirewallRuleStepTest {
                 .thenReturn(0);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @Test
     void testDescriptor() {
         final var descriptor = new CreateFirewallRuleStep.Descriptor();
-        assertEquals("Create a firewall rule", descriptor.getDisplayName());
-        assertEquals("createFirewallRule", descriptor.getFunctionName());
-        assertTrue(descriptor.getRequiredContext().containsAll(Set.of(Run.class, Launcher.class)));
+        assertThat(descriptor.getDisplayName()).isEqualTo("Create a firewall rule");
+        assertThat(descriptor.getFunctionName()).isEqualTo("createFirewallRule");
+        assertThat(descriptor.getRequiredContext()).isEqualTo(Set.of(Run.class, Launcher.class, EnvVars.class));
     }
 
     @Test
     void testRunBothActionAndAllowNull() {
         final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
 
-        assertThrows(IllegalArgumentException.class, execution::run);
+        assertThatCode(execution::run).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -62,7 +58,7 @@ class CreateFirewallRuleStepTest {
         step.setAllow("allow");
         final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
 
-        assertDoesNotThrow(execution::run);
+        assertThatCode(execution::run).doesNotThrowAnyException();
     }
 
     @Test
@@ -70,7 +66,7 @@ class CreateFirewallRuleStepTest {
         step.setAction("action");
         final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
 
-        assertDoesNotThrow(execution::run);
+        assertThatCode(execution::run).doesNotThrowAnyException();
     }
 
     @Test
@@ -85,7 +81,7 @@ class CreateFirewallRuleStepTest {
                         .join())
                 .thenReturn(1);
 
-        assertThrows(IllegalArgumentException.class, execution::run);
+        assertThatCode(execution::run).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -102,7 +98,7 @@ class CreateFirewallRuleStepTest {
                         .join())
                 .thenReturn(0);
 
-        assertDoesNotThrow(execution::run);
+        assertThatCode(execution::run).doesNotThrowAnyException();
     }
 
     @Test
@@ -126,25 +122,25 @@ class CreateFirewallRuleStepTest {
 
         final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
 
-        assertDoesNotThrow(execution::run);
+        assertThatCode(execution::run).doesNotThrowAnyException();
 
         final var cmd = ArgumentCaptor.forClass(ArgumentListBuilder.class);
         verify(launcherMock.launch(), atLeastOnce()).cmds(cmd.capture());
-        assertTrue(cmd.getValue().toString().contains("--action=action"));
-        assertFalse(cmd.getValue().toString().contains("--allow=allow"));
-        assertTrue(cmd.getValue().toString().contains("--description=description"));
-        assertTrue(cmd.getValue().toString().contains("--destination-ranges=destinationRanges"));
-        assertTrue(cmd.getValue().toString().contains("--disabled"));
-        assertTrue(cmd.getValue().toString().contains("--direction=direction"));
-        assertTrue(cmd.getValue().toString().contains("--enable-logging"));
-        assertTrue(cmd.getValue().toString().contains("--logging-metadata=loggingMetadata"));
-        assertTrue(cmd.getValue().toString().contains("--network=network"));
-        assertTrue(cmd.getValue().toString().contains("--priority=1000"));
-        assertTrue(cmd.getValue().toString().contains("--rules=rules"));
-        assertTrue(cmd.getValue().toString().contains("--source-ranges=sourceRanges"));
-        assertTrue(cmd.getValue().toString().contains("--source-service-accounts=sourceServiceAccounts"));
-        assertTrue(cmd.getValue().toString().contains("--source-tags=sourceTags"));
-        assertTrue(cmd.getValue().toString().contains("--target-service-accounts=targetServiceAccounts"));
-        assertTrue(cmd.getValue().toString().contains("--target-tags=targetTags"));
+        assertThat(cmd.getValue().toString()).contains("--action=action");
+        assertThat(cmd.getValue().toString()).doesNotContain("--allow=allow");
+        assertThat(cmd.getValue().toString()).contains("--description=description");
+        assertThat(cmd.getValue().toString()).contains("--destination-ranges=destinationRanges");
+        assertThat(cmd.getValue().toString()).contains("--disabled");
+        assertThat(cmd.getValue().toString()).contains("--direction=direction");
+        assertThat(cmd.getValue().toString()).contains("--enable-logging");
+        assertThat(cmd.getValue().toString()).contains("--logging-metadata=loggingMetadata");
+        assertThat(cmd.getValue().toString()).contains("--network=network");
+        assertThat(cmd.getValue().toString()).contains("--priority=1000");
+        assertThat(cmd.getValue().toString()).contains("--rules=rules");
+        assertThat(cmd.getValue().toString()).contains("--source-ranges=sourceRanges");
+        assertThat(cmd.getValue().toString()).contains("--source-service-accounts=sourceServiceAccounts");
+        assertThat(cmd.getValue().toString()).contains("--source-tags=sourceTags");
+        assertThat(cmd.getValue().toString()).contains("--target-service-accounts=targetServiceAccounts");
+        assertThat(cmd.getValue().toString()).contains("--target-tags=targetTags");
     }
 }
