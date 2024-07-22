@@ -19,13 +19,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-class CreateFirewallRuleStepTest {
+class ComputeFirewallRulesCreateStepTest {
 
     private final StepContext contextMock = mock(StepContext.class);
     private final EnvVars envVarsMock = mock(EnvVars.class);
     private final Launcher launcherMock = mock(Launcher.class, RETURNS_DEEP_STUBS);
 
-    private final CreateFirewallRuleStep step = new CreateFirewallRuleStep("test");
+    private final ComputeFirewallRulesCreateStep step = new ComputeFirewallRulesCreateStep("test");
 
     @BeforeEach
     void before() throws Exception {
@@ -40,15 +40,16 @@ class CreateFirewallRuleStepTest {
 
     @Test
     void testDescriptor() {
-        final var descriptor = new CreateFirewallRuleStep.Descriptor();
+        final var descriptor = new ComputeFirewallRulesCreateStep.Descriptor();
         assertThat(descriptor.getDisplayName()).isEqualTo("Create a firewall rule");
-        assertThat(descriptor.getFunctionName()).isEqualTo("createFirewallRule");
+        assertThat(descriptor.getFunctionName()).isEqualTo("computeFirewallRulesCreate");
         assertThat(descriptor.getRequiredContext()).isEqualTo(Set.of(Run.class, Launcher.class, EnvVars.class));
     }
 
     @Test
     void testRunBothActionAndAllowNull() {
-        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+        final var execution =
+                new ComputeFirewallRulesCreateStep.ComputeFirewallRulesCreateRuleStepExecution(contextMock, step);
 
         assertThatCode(execution::run).isInstanceOf(IllegalArgumentException.class);
     }
@@ -56,7 +57,8 @@ class CreateFirewallRuleStepTest {
     @Test
     void testRunActionNullAllowNotNull() {
         step.setAllow("allow");
-        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+        final var execution =
+                new ComputeFirewallRulesCreateStep.ComputeFirewallRulesCreateRuleStepExecution(contextMock, step);
 
         assertThatCode(execution::run).doesNotThrowAnyException();
     }
@@ -64,7 +66,8 @@ class CreateFirewallRuleStepTest {
     @Test
     void testRunActionNotNullAllowNull() {
         step.setAction("action");
-        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+        final var execution =
+                new ComputeFirewallRulesCreateStep.ComputeFirewallRulesCreateRuleStepExecution(contextMock, step);
 
         assertThatCode(execution::run).doesNotThrowAnyException();
     }
@@ -72,7 +75,8 @@ class CreateFirewallRuleStepTest {
     @Test
     void testRunLauncherCommandNonZeroResult() throws Exception {
         step.setAction("action");
-        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+        final var execution =
+                new ComputeFirewallRulesCreateStep.ComputeFirewallRulesCreateRuleStepExecution(contextMock, step);
 
         when(launcherMock
                         .launch()
@@ -88,7 +92,8 @@ class CreateFirewallRuleStepTest {
     void testRunLauncherCommandWithEnvVars() throws Exception {
         step.setAction("action");
         when(contextMock.get(EnvVars.class)).thenReturn(envVarsMock);
-        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+        final var execution =
+                new ComputeFirewallRulesCreateStep.ComputeFirewallRulesCreateRuleStepExecution(contextMock, step);
 
         when(launcherMock
                         .launch()
@@ -120,7 +125,8 @@ class CreateFirewallRuleStepTest {
         step.setTargetServiceAccounts("targetServiceAccounts");
         step.setTargetTags("targetTags");
 
-        final var execution = new CreateFirewallRuleStep.CreateFirewallRuleStepExecution(contextMock, step);
+        final var execution =
+                new ComputeFirewallRulesCreateStep.ComputeFirewallRulesCreateRuleStepExecution(contextMock, step);
 
         assertThatCode(execution::run).doesNotThrowAnyException();
 

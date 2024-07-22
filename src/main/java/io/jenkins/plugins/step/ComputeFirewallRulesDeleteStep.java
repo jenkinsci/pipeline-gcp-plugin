@@ -14,12 +14,12 @@ import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-public class DeleteFirewallRuleStep extends Step {
+public class ComputeFirewallRulesDeleteStep extends Step {
 
     private final String name;
 
     @DataBoundConstructor
-    public DeleteFirewallRuleStep(final String name) {
+    public ComputeFirewallRulesDeleteStep(final String name) {
         this.name = name;
     }
 
@@ -37,7 +37,7 @@ public class DeleteFirewallRuleStep extends Step {
 
         @Override
         public String getFunctionName() {
-            return "deleteFirewallRule";
+            return "computeFirewallRulesDelete";
         }
 
         @Override
@@ -49,15 +49,15 @@ public class DeleteFirewallRuleStep extends Step {
 
     @Override
     public StepExecution start(final StepContext context) {
-        return new DeleteFirewallRuleStepExecution(context, name);
+        return new ComputeFirewallRulesDeleteRuleStepExecution(context, name);
     }
 
-    static final class DeleteFirewallRuleStepExecution extends SynchronousStepExecution<Void> {
+    static final class ComputeFirewallRulesDeleteRuleStepExecution extends SynchronousStepExecution<Void> {
 
         private static final long serialVersionUID = 1L;
         private final String name;
 
-        DeleteFirewallRuleStepExecution(final StepContext context, final String name) {
+        ComputeFirewallRulesDeleteRuleStepExecution(final StepContext context, final String name) {
             super(context);
             this.name = name;
         }

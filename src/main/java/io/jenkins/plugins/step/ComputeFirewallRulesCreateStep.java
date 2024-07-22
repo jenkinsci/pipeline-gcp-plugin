@@ -15,7 +15,7 @@ import org.jenkinsci.plugins.workflow.steps.SynchronousStepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
-public class CreateFirewallRuleStep extends Step {
+public class ComputeFirewallRulesCreateStep extends Step {
 
     private final String name;
 
@@ -40,7 +40,7 @@ public class CreateFirewallRuleStep extends Step {
     private String targetTags;
 
     @DataBoundConstructor
-    public CreateFirewallRuleStep(final String name) {
+    public ComputeFirewallRulesCreateStep(final String name) {
         this.name = name;
     }
 
@@ -202,7 +202,7 @@ public class CreateFirewallRuleStep extends Step {
 
         @Override
         public String getFunctionName() {
-            return "createFirewallRule";
+            return "computeFirewallRulesCreate";
         }
 
         @Override
@@ -214,15 +214,16 @@ public class CreateFirewallRuleStep extends Step {
 
     @Override
     public StepExecution start(final StepContext context) {
-        return new CreateFirewallRuleStepExecution(context, this);
+        return new ComputeFirewallRulesCreateRuleStepExecution(context, this);
     }
 
-    static final class CreateFirewallRuleStepExecution extends SynchronousStepExecution<Void> {
+    static final class ComputeFirewallRulesCreateRuleStepExecution extends SynchronousStepExecution<Void> {
 
         private static final long serialVersionUID = 1L;
-        private final transient CreateFirewallRuleStep step;
+        private final transient ComputeFirewallRulesCreateStep step;
 
-        CreateFirewallRuleStepExecution(final StepContext context, final CreateFirewallRuleStep step) {
+        ComputeFirewallRulesCreateRuleStepExecution(
+                final StepContext context, final ComputeFirewallRulesCreateStep step) {
             super(context);
             this.step = step;
         }
