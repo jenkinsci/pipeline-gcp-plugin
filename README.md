@@ -15,8 +15,8 @@ The service account will need to have the necessary permissions to interact with
 ## Features
 
 * [withGCP](#withGCP)
-* [createFirewallRule](#createFirewallRule)
-* [deleteFirewallRule](#deleteFirewallRule)
+* [computeFirewallRulesCreate](#computeFirewallRulesCreate)
+* [computeFirewallRulesDelete](#computeFirewallRulesDelete)
 * _more features to come..._
 
 ### withGCP
@@ -29,28 +29,28 @@ withGCP(credentialsId: "credentials-id") {
 }
 ```
 
-### createFirewallRule
+### computeFirewallRulesCreate
 This step will create a firewall rule with the given configuration.
 
 Please refer to the [CLI command documentation](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/create) for more information on the parameters.
 
 Either `allow` or `action` must be provided:
 ```groovy
-createFirewallRule(name: "firewallRuleName", allow: "tcp:22")
+computeFirewallRulesCreate(name: "firewallRuleName", allow: "tcp:22")
 ```
 or
 ```groovy
-createFirewallRule(name: "firewallRuleName", action: "DENY", rules: "tcp:22")
+computeFirewallRulesCreate(name: "firewallRuleName", action: "DENY", rules: "tcp:22")
 ```
 
-### deleteFirewallRule
+### computeFirewallRulesDelete
 This step will delete firewall rules with the given names.
 Names should be separated by a whitespace.
 
 Please refer to the [CLI command documentation](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/delete) for more information.
 
 ```groovy
-deleteFirewallRule(name: "firewallRuleName anotherFirewallRuleName")
+computeFirewallRulesDelete(name: "firewallRuleName anotherFirewallRuleName")
 ```
 
 ## Contributing
