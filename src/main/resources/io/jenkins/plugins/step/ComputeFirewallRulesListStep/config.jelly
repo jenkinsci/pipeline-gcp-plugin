@@ -1,0 +1,30 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
+    <f:entry field="name" title="Name">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="regexp" title="Regexp">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="filter" title="Filter">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="limit" title="Limit">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="pageSize" title="Page Size">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="sortBy" title="Sort By">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="uri" title="Uri">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="format" title="Format">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="printOutput" title="Print Output">
+        <f:textbox/>
+    </f:entry>
+</j:jelly>
