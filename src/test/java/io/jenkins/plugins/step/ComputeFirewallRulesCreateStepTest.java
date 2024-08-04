@@ -132,21 +132,27 @@ class ComputeFirewallRulesCreateStepTest {
 
         final var cmd = ArgumentCaptor.forClass(ArgumentListBuilder.class);
         verify(launcherMock.launch(), atLeastOnce()).cmds(cmd.capture());
-        assertThat(cmd.getValue().toString()).contains("--action=action");
-        assertThat(cmd.getValue().toString()).doesNotContain("--allow=allow");
-        assertThat(cmd.getValue().toString()).contains("--description=description");
-        assertThat(cmd.getValue().toString()).contains("--destination-ranges=destinationRanges");
-        assertThat(cmd.getValue().toString()).contains("--disabled");
-        assertThat(cmd.getValue().toString()).contains("--direction=direction");
-        assertThat(cmd.getValue().toString()).contains("--enable-logging");
-        assertThat(cmd.getValue().toString()).contains("--logging-metadata=loggingMetadata");
-        assertThat(cmd.getValue().toString()).contains("--network=network");
-        assertThat(cmd.getValue().toString()).contains("--priority=1000");
-        assertThat(cmd.getValue().toString()).contains("--rules=rules");
-        assertThat(cmd.getValue().toString()).contains("--source-ranges=sourceRanges");
-        assertThat(cmd.getValue().toString()).contains("--source-service-accounts=sourceServiceAccounts");
-        assertThat(cmd.getValue().toString()).contains("--source-tags=sourceTags");
-        assertThat(cmd.getValue().toString()).contains("--target-service-accounts=targetServiceAccounts");
-        assertThat(cmd.getValue().toString()).contains("--target-tags=targetTags");
+        assertThat(cmd.getValue().toList())
+                .containsExactly(
+                        "gcloud",
+                        "compute",
+                        "firewall-rules",
+                        "create",
+                        "test",
+                        "--action=action",
+                        "--description=description",
+                        "--destination-ranges=destinationRanges",
+                        "--direction=direction",
+                        "--disabled",
+                        "--enable-logging",
+                        "--logging-metadata=loggingMetadata",
+                        "--network=network",
+                        "--priority=1000",
+                        "--rules=rules",
+                        "--source-ranges=sourceRanges",
+                        "--source-service-accounts=sourceServiceAccounts",
+                        "--source-tags=sourceTags",
+                        "--target-service-accounts=targetServiceAccounts",
+                        "--target-tags=targetTags");
     }
 }

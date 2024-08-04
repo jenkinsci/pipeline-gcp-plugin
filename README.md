@@ -17,6 +17,7 @@ The service account will need to have the necessary permissions to interact with
 * [withGCP](#withGCP)
 * [computeFirewallRulesCreate](#computeFirewallRulesCreate)
 * [computeFirewallRulesDelete](#computeFirewallRulesDelete)
+* [computeFirewallRulesList](#computeFirewallRulesList)
 * _more features to come..._
 
 ### withGCP
@@ -29,9 +30,15 @@ withGCP(credentialsId: "credentials-id") {
 }
 ```
 
+You can also combine other steps with it:
+```groovy
+withGCP(credentialsId: "credentials-id") {
+    computeFirewallRulesCreate(name: "firewallRuleName", allow: "tcp:22")
+}
+```
+
 ### computeFirewallRulesCreate
 This step will create a firewall rule with the given configuration.
-
 Please refer to the [CLI command documentation](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/create) for more information on the parameters.
 
 Either `allow` or `action` must be provided:
@@ -46,12 +53,43 @@ computeFirewallRulesCreate(name: "firewallRuleName", action: "DENY", rules: "tcp
 ### computeFirewallRulesDelete
 This step will delete firewall rules with the given names.
 Names should be separated by a whitespace.
-
 Please refer to the [CLI command documentation](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/delete) for more information.
 
 ```groovy
 computeFirewallRulesDelete(name: "firewallRuleName anotherFirewallRuleName")
 ```
+
+### computeFirewallRulesList
+This step will list firewall rules.
+Please refer to the [CLI command documentation](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/list) for more information.
+
+To print the list of firewall rules:
+```groovy
+computeFirewallRulesList()
+```
+
+To print the list of firewall rules in table format:
+```groovy
+computeFirewallRulesList(format: "table(name)")
+```
+
+To print the list of firewall rules applying a filter:
+```groovy
+computeFirewallRulesList(filter: "name~'^default-.*' AND network=default")
+```
+
+To store the result in a variable for further processing:
+```groovy
+def json = computeFirewallRulesList(format: "json")
+def jqOutput = sh(script: "echo '${json}' | jq -r .[].id", returnStdout: true).trim()
+echo "Filtered Output: ${jqOutput}"
+
+``` 
+To suppress the console output:
+```groovy
+def firewallRules = computeFirewallRulesList(printOutput: false)
+echo "Firewall Rules: ${firewallRules}"
+``` 
 
 ## Contributing
 
