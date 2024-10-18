@@ -22,8 +22,8 @@ The service account will need to have the necessary permissions to interact with
 
 ### withGCP
 This step will load the credentials file by the id and set the environment variables for the gcloud command to use.
-In particular, it will set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the credentials file.
-And will also attempt to extract the `project_id` from the file and set it as `CLOUDSDK_CORE_PROJECT` environment variable.
+In particular, it will try to extract the `client_email` from the file and set it as `CLOUDSDK_CORE_ACCOUNT` environment variable.
+And it will also attempt to extract the `project_id` from the file and set it as `CLOUDSDK_CORE_PROJECT` environment variable.
 ```groovy
 withGCP(credentialsId: "credentials-id") {
     // run gcloud commands here

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -28,7 +29,10 @@ import org.junit.jupiter.api.Test;
 
 class WithGCPStepTest {
     private static final String CREDENTIALS_ID = "id";
-    private static final String GOOGLE_APPLICATION_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
+    private static final String CLOUDSDK_CORE_ACCOUNT = "CLOUDSDK_CORE_ACCOUNT";
+    private static final String CLOUDSDK_CORE_PROJECT = "CLOUDSDK_CORE_PROJECT";
+    private static final String ACCOUNT = "email";
+    private static final String PROJECT = "project";
 
     private final StepContext stepContextMock = mock(StepContext.class, RETURNS_DEEP_STUBS);
     private final Launcher launcherMock = mock(Launcher.class);
@@ -49,7 +53,8 @@ class WithGCPStepTest {
         when(procStarterMock.pwd(workspaceMock)).thenReturn(procStarterMock);
         when(procStarterMock.quiet(true)).thenReturn(procStarterMock);
         when(workspaceMock.createTempFile(anyString(), anyString())).thenReturn(tempFileMock);
-        when(tempFileMock.readToString()).thenReturn("{project_id: \"id\"}");
+        when(tempFileMock.readToString())
+                .thenReturn(String.format("{project_id: \"%s\", client_email: \"%s\"}", PROJECT, ACCOUNT));
         when(credentialsMock.getId()).thenReturn(CREDENTIALS_ID);
     }
 
@@ -91,7 +96,8 @@ class WithGCPStepTest {
             final var executionResult = result.start();
 
             assertThat(executionResult).isFalse();
-            verify(envVarsMock).put(GOOGLE_APPLICATION_CREDENTIALS, CREDENTIALS_ID);
+            verify(envVarsMock).put(CLOUDSDK_CORE_ACCOUNT, ACCOUNT);
+            verify(envVarsMock).put(CLOUDSDK_CORE_PROJECT, PROJECT);
         }
     }
 
@@ -111,7 +117,8 @@ class WithGCPStepTest {
             assertThat(result).isNotNull();
 
             assertThatCode(result::start).isInstanceOf(IllegalArgumentException.class);
-            verify(envVarsMock, never()).put(GOOGLE_APPLICATION_CREDENTIALS, CREDENTIALS_ID);
+            verify(envVarsMock, never()).put(eq(CLOUDSDK_CORE_ACCOUNT), any());
+            verify(envVarsMock, never()).put(eq(CLOUDSDK_CORE_PROJECT), any());
         }
     }
 

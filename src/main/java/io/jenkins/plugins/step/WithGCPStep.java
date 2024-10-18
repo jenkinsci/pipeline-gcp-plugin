@@ -103,10 +103,10 @@ public class WithGCPStep extends Step {
             }
 
             final var envVars = context.get(EnvVars.class);
-            envVars.put("GOOGLE_APPLICATION_CREDENTIALS", credentialsId);
-            final var projectId = extractProjectId(tempFile);
-            if (projectId != null) {
-                envVars.put("CLOUDSDK_CORE_PROJECT", projectId);
+            final var publicCredentialValues = extractPublicCredentialValues(tempFile);
+            if (publicCredentialValues != null) {
+                envVars.put("CLOUDSDK_CORE_ACCOUNT", publicCredentialValues.email);
+                envVars.put("CLOUDSDK_CORE_PROJECT", publicCredentialValues.projectId);
             }
             context.newBodyInvoker()
                     .withContext(EnvironmentExpander.merge(
@@ -141,10 +141,12 @@ public class WithGCPStep extends Step {
                     .orElse(null);
         }
 
-        private static String extractProjectId(final FilePath fileCreds) {
+        private static PublicCredentialValues extractPublicCredentialValues(final FilePath fileCreds) {
             try {
                 final var jsonObject = new JSONObject(fileCreds.readToString());
-                return jsonObject.getString("project_id");
+                final var email = jsonObject.getString("client_email");
+                final var projectId = jsonObject.getString("project_id");
+                return new PublicCredentialValues(email, projectId);
             } catch (final InterruptedException | IOException e) {
                 return null;
             }
@@ -160,6 +162,16 @@ public class WithGCPStep extends Step {
             @Override
             public void expand(@NonNull final EnvVars env) {
                 env.overrideAll(envVars);
+            }
+        }
+
+        private static class PublicCredentialValues {
+            private final String email;
+            private final String projectId;
+
+            private PublicCredentialValues(final String email, final String projectId) {
+                this.email = email;
+                this.projectId = projectId;
             }
         }
     }
