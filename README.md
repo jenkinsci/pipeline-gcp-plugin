@@ -1,6 +1,10 @@
 # Pipeline: GCP Steps
 
 [![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins/pipeline-gcp-plugin/master)](https://ci.jenkins.io/job/Plugins/job/pipeline-gcp-plugin/job/master/)
+[![Contributors](https://img.shields.io/github/contributors/jenkinsci/pipeline-gcp-plugin.svg)](https://github.com/jenkinsci/pipeline-gcp-plugin/graphs/contributors)
+[![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/pipeline-gcp.svg)](https://plugins.jenkins.io/pipeline-gcp)
+[![GitHub release](https://img.shields.io/github/v/tag/jenkinsci/pipeline-gcp?label=changelog)](https://github.com/jenkinsci/pipeline-gcp-plugin/releases)
+[![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/pipeline-gcp.svg?color=blue)](https://plugins.jenkins.io/pipeline-gcp)
 
 ## Introduction
 
